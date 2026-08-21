@@ -38,7 +38,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
         placeholder="Type your message in English, Hindi, or Hinglish..."
         disabled={disabled}
         autoComplete="off"
-        className="flex-1 px-5 py-3.5 rounded-[14px] text-sm bg-gray-50 border-[1.5px] border-gray-200 outline-none transition-all duration-200 focus:border-gold-500 focus:bg-white focus:ring-2 focus:ring-gold-500/12 placeholder:text-gray-400"
+        className="flex-1 px-5 py-3.5 rounded-[14px] text-base md:text-sm bg-gray-50 border-[1.5px] border-gray-200 outline-none transition-all duration-200 focus:border-gold-500 focus:bg-white focus:ring-2 focus:ring-gold-500/12 placeholder:text-gray-400"
       />
       <button
         type="submit"
