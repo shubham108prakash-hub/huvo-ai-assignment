@@ -60,24 +60,7 @@
         const messagesEl = document.getElementById("messages");
         const inputEl = document.getElementById("user-input");
         const typingEl = document.getElementById("typing");
-
-        function addMessage(role, text) {
-            const div = document.createElement("div");
-            div.className = `message ${role}-message`;
-            div.style.animation = "msgIn 0.3s ease-out";
-
-            if (role === "bot") {
-                div.innerHTML = `
-                    <div class="bot-avatar">N</div>
-                    <div class="bubble bot-bubble">${escapeHtml(text)}</div>
-                `;
-            } else {
-                div.innerHTML = `<div class="bubble user-bubble">${escapeHtml(text)}</div>`;
-            }
-
-            messagesEl.appendChild(div);
-            messagesEl.scrollTop = messagesEl.scrollHeight;
-        }
+        const sendBtn = document.getElementById("send-btn");
 
         function escapeHtml(text) {
             const d = document.createElement("div");
@@ -85,19 +68,44 @@
             return d.innerHTML;
         }
 
+        function addUserMessage(text) {
+            const div = document.createElement("div");
+            div.className = "message user-message";
+            div.style.animation = "msgIn 0.3s ease-out";
+            div.innerHTML = `<div class="bubble user-bubble">${escapeHtml(text)}</div>`;
+            messagesEl.appendChild(div);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function createBotMessage() {
+            const div = document.createElement("div");
+            div.className = "message bot-message";
+            div.style.animation = "msgIn 0.3s ease-out";
+            div.innerHTML = `
+                <div class="bot-avatar">N</div>
+                <div class="bubble bot-bubble"></div>
+            `;
+            messagesEl.appendChild(div);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+            return div.querySelector(".bubble");
+        }
+
         async function sendMessage(e) {
             e.preventDefault();
             const text = inputEl.value.trim();
             if (!text) return;
 
-            addMessage("user", text);
+            addUserMessage(text);
             chatHistory.push({ role: "user", content: text });
             inputEl.value = "";
             inputEl.focus();
 
             typingEl.classList.remove("hidden");
             messagesEl.scrollTop = messagesEl.scrollHeight;
-            document.getElementById("send-btn").disabled = true;
+            sendBtn.disabled = true;
+
+            const botBubble = createBotMessage();
+            let fullReply = "";
 
             try {
                 const res = await fetch("/api/chat", {
@@ -105,15 +113,44 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ messages: chatHistory }),
                 });
-                const data = await res.json();
-                addMessage("bot", data.reply);
-                chatHistory.push({ role: "assistant", content: data.reply });
+
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = "";
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split("\n");
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        if (!line.startsWith("data: ")) continue;
+                        try {
+                            const event = JSON.parse(line.slice(6));
+
+                            if (event.type === "token") {
+                                fullReply += event.content;
+                                botBubble.textContent = fullReply;
+                                messagesEl.scrollTop = messagesEl.scrollHeight;
+                            }
+
+                            if (event.type === "done") {
+                                fullReply = event.reply;
+                                botBubble.textContent = fullReply;
+                                chatHistory.push({ role: "assistant", content: fullReply });
+                            }
+                        } catch {}
+                    }
+                }
             } catch (err) {
-                addMessage("bot", "Sorry, something went wrong. Please try again.");
+                botBubble.textContent = "Sorry, something went wrong. Please try again.";
             }
 
             typingEl.classList.add("hidden");
-            document.getElementById("send-btn").disabled = false;
+            sendBtn.disabled = false;
         }
 
         async function showAnalytics() {
@@ -207,6 +244,15 @@
             messagesEl.innerHTML = "";
             conversationStart = Date.now();
             addMessage("bot", "Welcome to Northstar Homes! I'm your AI sales assistant. How can I help you today? Are you interested in learning about our projects in Gurugram?");
+        }
+
+        function addMessage(role, text) {
+            if (role === "user") {
+                addUserMessage(text);
+            } else {
+                const bubble = createBotMessage();
+                bubble.textContent = text;
+            }
         }
 
         addMessage("bot", "Welcome to Northstar Homes! I'm your AI sales assistant. How can I help you today? Are you interested in learning about our projects in Gurugram?");

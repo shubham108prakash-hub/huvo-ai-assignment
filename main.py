@@ -1,14 +1,15 @@
 import os
+import json
 from dotenv import load_dotenv
 load_dotenv()
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from bot import chat as bot_chat
+from bot import chat_stream
 from analytics import extract_conversation_analytics
 
 app = FastAPI(title="Northstar Homes AI Assistant")
@@ -38,10 +39,14 @@ async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/api/chat")
-async def chat_endpoint(req: ChatRequest):
+async def chat_stream_endpoint(req: ChatRequest):
     messages = [{"role": m.role, "content": m.content} for m in req.messages]
-    result = bot_chat(messages)
-    return result
+
+    def event_stream():
+        for event in chat_stream(messages):
+            yield f"data: {json.dumps(event)}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 @app.post("/api/analytics")
 async def analytics_endpoint(req: AnalyticsRequest):
