@@ -1,5 +1,7 @@
 # Northstar Homes — AI Sales Assistant
 
+**Live Demo:** [https://huvo-ai-assignment.onrender.com/](https://huvo-ai-assignment.onrender.com/)
+
 An AI-powered conversational bot for Northstar Homes, built with FastAPI (Python) backend and Next.js frontend. The bot handles customer enquiries, qualifies leads, books site visits, and supports English, Hindi, and Hinglish.
 
 ## Project: Northstar One
