@@ -58,6 +58,11 @@
         let conversationStart = Date.now();
 
         const messagesEl = document.getElementById("messages");
+        const chatArea = document.getElementById("chat-area");
+
+        function scrollToBottom() {
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
         const inputEl = document.getElementById("user-input");
         const typingEl = document.getElementById("typing");
         const sendBtn = document.getElementById("send-btn");
@@ -74,7 +79,7 @@
             div.style.animation = "msgIn 0.3s ease-out";
             div.innerHTML = `<div class="bubble user-bubble">${escapeHtml(text)}</div>`;
             messagesEl.appendChild(div);
-            messagesEl.scrollTop = messagesEl.scrollHeight;
+            scrollToBottom();
         }
 
         function createBotMessage() {
@@ -86,7 +91,7 @@
                 <div class="bubble bot-bubble"></div>
             `;
             messagesEl.appendChild(div);
-            messagesEl.scrollTop = messagesEl.scrollHeight;
+            scrollToBottom();
             return div.querySelector(".bubble");
         }
 
@@ -101,7 +106,7 @@
             inputEl.focus();
 
             typingEl.classList.remove("hidden");
-            messagesEl.scrollTop = messagesEl.scrollHeight;
+            scrollToBottom();
             sendBtn.disabled = true;
 
             const botBubble = createBotMessage();
@@ -134,7 +139,7 @@
                             if (event.type === "token") {
                                 fullReply += event.content;
                                 botBubble.textContent = fullReply;
-                                messagesEl.scrollTop = messagesEl.scrollHeight;
+                                scrollToBottom();
                             }
 
                             if (event.type === "done") {
