@@ -1,20 +1,29 @@
 "use client";
-
 import React from "react";
 
 export default function TypingIndicator() {
   return (
-    <div className="flex justify-start mb-4 animate-[msgIn_0.3s_ease-out]">
-      <div className="w-8 h-8 bg-gradient-to-br from-gold-400 to-gold-500 rounded-[10px] flex items-center justify-center font-bold text-[13px] text-navy-950 shrink-0 self-end mr-2.5">
+    <div className="msg-bubble flex justify-start mb-3 items-end gap-2">
+      <div
+        className="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-[13px] shrink-0"
+        style={{ background: "linear-gradient(135deg, #e4af3c, #c8a45c)", color: "#0a1929" }}
+      >
         N
       </div>
-      <div className="px-5 py-3.5 rounded-[20px] rounded-bl-[6px] bg-white text-gray-400 text-sm shadow-md border border-black/[0.04] italic">
-        Typing
-        <span className="inline-flex gap-1 ml-1">
-          <span className="w-[5px] h-[5px] bg-gray-400 rounded-full animate-[dotPulse_1.2s_ease-in-out_infinite]" />
-          <span className="w-[5px] h-[5px] bg-gray-400 rounded-full animate-[dotPulse_1.2s_ease-in-out_infinite_0.15s]" />
-          <span className="w-[5px] h-[5px] bg-gray-400 rounded-full animate-[dotPulse_1.2s_ease-in-out_infinite_0.3s]" />
-        </span>
+      <div
+        className="px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-1.5"
+        style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.07)" }}
+      >
+        {[0, 0.18, 0.36].map((delay, i) => (
+          <span
+            key={i}
+            className="w-2 h-2 rounded-full inline-block"
+            style={{
+              background: "#94a3b8",
+              animation: `dotBounce 1.2s ease-in-out ${delay}s infinite`,
+            }}
+          />
+        ))}
       </div>
     </div>
   );

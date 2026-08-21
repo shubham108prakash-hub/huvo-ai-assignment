@@ -65,8 +65,7 @@ export default function Home() {
         body: JSON.stringify({ messages: updated }),
       });
       const data = await res.json();
-      const botMsg: Message = { role: "assistant", content: data.reply };
-      setMessages((prev) => [...prev, botMsg]);
+      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -79,7 +78,6 @@ export default function Home() {
 
   async function handleAnalytics() {
     if (messages.length === 0) return;
-
     setDuration(computeDuration());
     try {
       const res = await fetch("/api/analytics", {
@@ -101,45 +99,48 @@ export default function Home() {
   }
 
   return (
-    <div className="fixed inset-0 flex justify-center bg-[#f0f2f5]">
-      <div className="w-full max-w-[860px] flex flex-col bg-white shadow-[0_0_60px_rgba(0,0,0,0.08)] overflow-hidden">
-        <Header onAnalytics={handleAnalytics} onNewChat={handleNewChat} />
+    /* chat-shell uses CSS Grid: header | messages (scrollable) | input */
+    <div className="chat-shell">
+      <Header onAnalytics={handleAnalytics} onNewChat={handleNewChat} />
 
-        <main className="flex-1 flex flex-col min-h-0 bg-gray-50">
-          <div className="flex-1 overflow-y-auto px-7 py-6 scrollbar-thin scroll-smooth">
-            {messages.length === 0 && (
-              <div className="flex justify-start mb-4 animate-[msgIn_0.3s_ease-out]">
-                <div className="w-8 h-8 bg-gradient-to-br from-gold-400 to-gold-500 rounded-[10px] flex items-center justify-center font-bold text-[13px] text-navy-950 shrink-0 self-end mr-2.5">
-                  N
-                </div>
-                <div className="max-w-[68%] px-5 py-3.5 rounded-[20px] rounded-bl-[6px] bg-white text-navy-900 text-sm leading-relaxed shadow-md border border-black/[0.04]">
-                  {GREETING}
-                </div>
-              </div>
-            )}
-
-            {messages.map((msg, i) => (
-              <ChatMessage key={i} role={msg.role} content={msg.content} />
-            ))}
-
-            {loading && <TypingIndicator />}
-
-            <div ref={chatEndRef} />
+      <div className="messages-area">
+        {/* Greeting bubble */}
+        {messages.length === 0 && (
+          <div className="msg-bubble flex justify-start mb-3 items-end gap-2">
+            <div
+              className="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-[13px] shrink-0"
+              style={{ background: "linear-gradient(135deg, #e4af3c, #c8a45c)", color: "#0a1929" }}
+            >
+              N
+            </div>
+            <div
+              className="max-w-[72%] px-4 py-3 rounded-2xl rounded-bl-sm text-sm leading-relaxed text-gray-800 shadow-sm"
+              style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.07)" }}
+            >
+              {GREETING}
+            </div>
           </div>
-
-          <div className="shrink-0">
-            <ChatInput onSend={sendMessage} disabled={loading} />
-          </div>
-        </main>
-
-        {showAnalytics && analytics && (
-          <AnalyticsModal
-            analytics={analytics}
-            duration={duration}
-            onClose={() => setShowAnalytics(false)}
-          />
         )}
+
+        {messages.map((msg, i) => (
+          <ChatMessage key={i} role={msg.role} content={msg.content} />
+        ))}
+
+        {loading && <TypingIndicator />}
+
+        {/* Scroll anchor */}
+        <div ref={chatEndRef} />
       </div>
+
+      <ChatInput onSend={sendMessage} disabled={loading} />
+
+      {showAnalytics && analytics && (
+        <AnalyticsModal
+          analytics={analytics}
+          duration={duration}
+          onClose={() => setShowAnalytics(false)}
+        />
+      )}
     </div>
   );
 }

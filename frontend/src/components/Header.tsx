@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 
 interface HeaderProps {
@@ -9,34 +8,57 @@ interface HeaderProps {
 
 export default function Header({ onAnalytics, onNewChat }: HeaderProps) {
   return (
-    <header className="relative flex items-center justify-between px-7 py-4 bg-gradient-to-r from-navy-950 via-navy-900 to-navy-800 text-white overflow-hidden">
-      <div className="absolute -top-12 -right-8 w-48 h-48 bg-gold-500/10 rounded-full blur-3xl pointer-events-none" />
+    <header
+      style={{ background: "linear-gradient(135deg, #0a1929 0%, #243b53 100%)" }}
+      className="relative flex items-center justify-between px-5 py-4 text-white overflow-hidden shrink-0"
+    >
+      {/* Glow accent */}
+      <div
+        className="pointer-events-none absolute -top-10 -right-6 w-40 h-40 rounded-full opacity-20"
+        style={{ background: "radial-gradient(circle, #e4af3c, transparent 70%)" }}
+      />
 
-      <div className="flex items-center gap-3.5 z-10">
-        <div className="w-11 h-11 bg-gradient-to-br from-gold-400 to-gold-500 rounded-xl flex items-center justify-center font-bold text-lg text-navy-950 shadow-lg shadow-gold-500/20">
+      {/* Logo + name */}
+      <div className="flex items-center gap-3 z-10">
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-base shrink-0 shadow-lg"
+          style={{ background: "linear-gradient(135deg, #e4af3c, #c8a45c)", color: "#0a1929" }}
+        >
           N
         </div>
         <div>
-          <h1 className="text-[17px] font-semibold tracking-tight">Northstar Homes</h1>
-          <span className="text-[12px] text-gold-300 font-medium tracking-wide">
+          <p className="text-[15px] font-semibold leading-tight tracking-tight">Northstar Homes</p>
+          <p className="text-[11px] font-medium tracking-wider" style={{ color: "#ecc46d" }}>
             AI Sales Assistant
-          </span>
+          </p>
         </div>
       </div>
 
+      {/* Action buttons */}
       <div className="flex gap-2 z-10">
-        <button
-          onClick={onAnalytics}
-          className="px-4 py-2 text-[13px] font-medium border border-gold-500/30 bg-gold-500/10 text-gold-300 rounded-xl hover:bg-gold-500/20 hover:border-gold-500/50 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur-sm"
-        >
-          Analytics
-        </button>
-        <button
-          onClick={onNewChat}
-          className="px-4 py-2 text-[13px] font-medium border border-gold-500/30 bg-gold-500/10 text-gold-300 rounded-xl hover:bg-gold-500/20 hover:border-gold-500/50 transition-all duration-200 hover:-translate-y-0.5 backdrop-blur-sm"
-        >
-          New Chat
-        </button>
+        {[
+          { label: "Analytics", onClick: onAnalytics },
+          { label: "New Chat", onClick: onNewChat },
+        ].map(({ label, onClick }) => (
+          <button
+            key={label}
+            onClick={onClick}
+            className="px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200"
+            style={{
+              border: "1px solid rgba(228,175,60,0.35)",
+              background: "rgba(228,175,60,0.12)",
+              color: "#ecc46d",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(228,175,60,0.25)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(228,175,60,0.12)";
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </div>
     </header>
   );
