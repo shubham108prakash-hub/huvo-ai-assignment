@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Northstar Homes — AI Sales Assistant</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --navy-950: #0a1929;
@@ -21,7 +29,8 @@
       --white: #ffffff;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--navy-950);
@@ -34,11 +43,12 @@
     #app {
       display: grid;
       grid-template-rows: auto 1fr auto;
-      height: 100svh;           /* svh = safest unit for mobile/tablet */
+      height: 100svh;
+      /* svh = safest unit for mobile/tablet */
       max-width: 860px;
       margin: 0 auto;
       background: var(--white);
-      box-shadow: 0 0 80px rgba(0,0,0,0.5);
+      box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
     }
 
     /* ── HEADER ── */
@@ -52,45 +62,75 @@
       position: relative;
       overflow: hidden;
     }
+
     header::after {
       content: '';
       position: absolute;
-      top: -40px; right: -20px;
-      width: 160px; height: 160px;
-      background: radial-gradient(circle, rgba(228,175,60,0.25), transparent 70%);
+      top: -40px;
+      right: -20px;
+      width: 160px;
+      height: 160px;
+      background: radial-gradient(circle, rgba(228, 175, 60, 0.25), transparent 70%);
       pointer-events: none;
     }
+
     .logo {
       display: flex;
       align-items: center;
       gap: 12px;
       z-index: 1;
     }
+
     .logo-icon {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
       border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 16px; color: var(--navy-950);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--navy-950);
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(228,175,60,0.35);
+      box-shadow: 0 4px 12px rgba(228, 175, 60, 0.35);
     }
-    .logo-text p { font-size: 15px; font-weight: 600; line-height: 1.2; }
-    .logo-text span { font-size: 11px; color: var(--gold-300); font-weight: 500; letter-spacing: .06em; }
 
-    .header-btns { display: flex; gap: 8px; z-index: 1; }
+    .logo-text p {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .logo-text span {
+      font-size: 11px;
+      color: var(--gold-300);
+      font-weight: 500;
+      letter-spacing: .06em;
+    }
+
+    .header-btns {
+      display: flex;
+      gap: 8px;
+      z-index: 1;
+    }
+
     .header-btns button {
       padding: 7px 14px;
-      font-size: 12px; font-weight: 500;
-      border: 1px solid rgba(228,175,60,0.35);
-      background: rgba(228,175,60,0.12);
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid rgba(228, 175, 60, 0.35);
+      background: rgba(228, 175, 60, 0.12);
       color: var(--gold-300);
       border-radius: 10px;
       cursor: pointer;
       font-family: inherit;
       transition: background .2s;
     }
-    .header-btns button:hover { background: rgba(228,175,60,0.25); }
+
+    .header-btns button:hover {
+      background: rgba(228, 175, 60, 0.25);
+    }
 
     /* ── MESSAGES ── */
     #messages {
@@ -101,23 +141,44 @@
       display: flex;
       flex-direction: column;
     }
-    #messages::-webkit-scrollbar { width: 4px; }
-    #messages::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+
+    #messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #messages::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
+    }
 
     .bubble-row {
       display: flex;
       margin-bottom: 12px;
       animation: msgIn .25s ease both;
     }
-    .bubble-row.user  { justify-content: flex-end; }
-    .bubble-row.bot   { justify-content: flex-start; align-items: flex-end; gap: 8px; }
+
+    .bubble-row.user {
+      justify-content: flex-end;
+    }
+
+    .bubble-row.bot {
+      justify-content: flex-start;
+      align-items: flex-end;
+      gap: 8px;
+    }
 
     .bot-icon {
-      width: 32px; height: 32px; flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
       background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
       border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: 700; color: var(--navy-950);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy-950);
     }
 
     .bubble {
@@ -129,30 +190,44 @@
       word-break: break-word;
       border-radius: 18px;
     }
+
     .bubble.user {
       background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
       color: #fff;
       border-bottom-right-radius: 4px;
-      box-shadow: 0 2px 8px rgba(16,42,67,0.2);
+      box-shadow: 0 2px 8px rgba(16, 42, 67, 0.2);
     }
+
     .bubble.bot {
       background: #fff;
       color: #1e293b;
       border-bottom-left-radius: 4px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.06);
     }
 
     /* typing dots */
-    .typing-dots { display: flex; gap: 5px; padding: 4px 0; }
+    .typing-dots {
+      display: flex;
+      gap: 5px;
+      padding: 4px 0;
+    }
+
     .typing-dots span {
-      width: 8px; height: 8px;
+      width: 8px;
+      height: 8px;
       background: #94a3b8;
       border-radius: 50%;
       animation: dotBounce 1.2s ease-in-out infinite;
     }
-    .typing-dots span:nth-child(2) { animation-delay: .18s; }
-    .typing-dots span:nth-child(3) { animation-delay: .36s; }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: .18s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: .36s;
+    }
 
     /* ── INPUT ROW ── */
     #input-row {
@@ -168,7 +243,8 @@
     #msg-input {
       flex: 1;
       padding: 12px 16px;
-      font-size: 16px;   /* 16px prevents iOS auto-zoom */
+      font-size: 16px;
+      /* 16px prevents iOS auto-zoom */
       font-family: inherit;
       border: 1.5px solid #e2e8f0;
       border-radius: 14px;
@@ -179,16 +255,21 @@
       -webkit-appearance: none;
       appearance: none;
     }
+
     #msg-input:focus {
       border-color: var(--gold-500);
-      box-shadow: 0 0 0 3px rgba(200,164,92,0.18);
+      box-shadow: 0 0 0 3px rgba(200, 164, 92, 0.18);
       background: #fff;
     }
-    #msg-input::placeholder { color: #94a3b8; }
+
+    #msg-input::placeholder {
+      color: #94a3b8;
+    }
 
     #send-btn {
       padding: 12px 22px;
-      font-size: 14px; font-weight: 600;
+      font-size: 14px;
+      font-weight: 600;
       font-family: inherit;
       border: none;
       border-radius: 14px;
@@ -198,283 +279,397 @@
       color: var(--navy-950);
       transition: opacity .2s, transform .15s;
     }
-    #send-btn:hover:not(:disabled) { transform: translateY(-1px); }
-    #send-btn:disabled { opacity: .45; cursor: not-allowed; background: #e2e8f0; color: #94a3b8; }
+
+    #send-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+
+    #send-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      background: #e2e8f0;
+      color: #94a3b8;
+    }
 
     /* ── ANALYTICS MODAL ── */
     #modal-backdrop {
       display: none;
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(10,25,41,.65);
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(10, 25, 41, .65);
       backdrop-filter: blur(4px);
-      align-items: center; justify-content: center;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
     }
-    #modal-backdrop.open { display: flex; }
+
+    #modal-backdrop.open {
+      display: flex;
+    }
 
     #modal {
       background: #fff;
       border-radius: 20px;
-      width: 100%; max-width: 580px;
+      width: 100%;
+      max-width: 580px;
       max-height: 85svh;
       overflow: hidden;
-      display: flex; flex-direction: column;
-      box-shadow: 0 30px 60px rgba(0,0,0,.35);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, .35);
       animation: fadeSlide .25s ease both;
     }
+
     .modal-head {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 16px 22px;
       background: linear-gradient(135deg, var(--navy-950), var(--navy-800));
       color: #fff;
     }
-    .modal-head h2 { font-size: 15px; font-weight: 600; }
-    .modal-close {
-      width: 32px; height: 32px;
-      background: rgba(255,255,255,.12); border: none; border-radius: 8px;
-      color: #fff; font-size: 20px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+
+    .modal-head h2 {
+      font-size: 15px;
+      font-weight: 600;
     }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, .12);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .modal-body {
-      overflow-y: auto; padding: 18px;
+      overflow-y: auto;
+      padding: 18px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 12px;
     }
+
     .stat-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 14px;
       padding: 14px;
     }
+
     .stat-label {
-      font-size: 10px; text-transform: uppercase; letter-spacing: .08em;
-      color: #94a3b8; font-weight: 600; margin-bottom: 8px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-bottom: 8px;
     }
-    .stat-value { font-size: 13px; font-weight: 600; color: #1e293b; }
+
+    .stat-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
     .badge {
-      display: inline-block; padding: 3px 10px;
-      border-radius: 999px; font-size: 12px; font-weight: 600;
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
       text-transform: capitalize;
     }
-    .badge.green { background: #dcfce7; color: #166534; }
-    .badge.yellow { background: #fef9c3; color: #854d0e; }
-    .badge.red { background: #fee2e2; color: #991b1b; }
+
+    .badge.green {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge.yellow {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .badge.red {
+      background: #fee2e2;
+      color: #991b1b;
+    }
 
     /* ── Animations ── */
     @keyframes msgIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     @keyframes dotBounce {
-      0%, 80%, 100% { transform: translateY(0); opacity: .4; }
-      40%           { transform: translateY(-6px); opacity: 1; }
+
+      0%,
+      80%,
+      100% {
+        transform: translateY(0);
+        opacity: .4;
+      }
+
+      40% {
+        transform: translateY(-6px);
+        opacity: 1;
+      }
     }
+
     @keyframes fadeSlide {
-      from { opacity: 0; transform: scale(.96) translateY(10px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(.96) translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
 
-<div id="app">
+  <div id="app">
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
-      <div class="logo-icon">N</div>
-      <div class="logo-text">
-        <p>Northstar Homes</p>
-        <span>AI Sales Assistant</span>
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <div class="logo-icon">N</div>
+        <div class="logo-text">
+          <p>Northstar Homes</p>
+          <span>AI Sales Assistant</span>
+        </div>
+      </div>
+      <div class="header-btns">
+        <button onclick="showAnalytics()">Analytics</button>
+        <button onclick="newChat()">New Chat</button>
+      </div>
+    </header>
+
+    <!-- MESSAGES -->
+    <div id="messages">
+      <!-- Greeting -->
+      <div class="bubble-row bot">
+        <div class="bot-icon">N</div>
+        <div class="bubble bot">Welcome to Northstar Homes! I'm your AI sales assistant. How can I help you today? Are
+          you interested in learning about our projects in Gurugram?</div>
       </div>
     </div>
-    <div class="header-btns">
-      <button onclick="showAnalytics()">Analytics</button>
-      <button onclick="newChat()">New Chat</button>
-    </div>
-  </header>
 
-  <!-- MESSAGES -->
-  <div id="messages">
-    <!-- Greeting -->
-    <div class="bubble-row bot">
-      <div class="bot-icon">N</div>
-      <div class="bubble bot">Welcome to Northstar Homes! I'm your AI sales assistant. How can I help you today? Are you interested in learning about our projects in Gurugram?</div>
+    <!-- INPUT ROW -->
+    <div id="input-row">
+      <input id="msg-input" type="text" placeholder="Type in English, Hindi, or Hinglish…" autocomplete="off"
+        onkeydown="handleKey(event)" />
+      <button id="send-btn" onclick="sendMessage()">Send</button>
+    </div>
+
+  </div>
+
+  <!-- ANALYTICS MODAL -->
+  <div id="modal-backdrop" onclick="closeModal(event)">
+    <div id="modal">
+      <div class="modal-head">
+        <h2>Conversation Analytics</h2>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
     </div>
   </div>
 
-  <!-- INPUT ROW -->
-  <div id="input-row">
-    <input
-      id="msg-input"
-      type="text"
-      placeholder="Type in English, Hindi, or Hinglish…"
-      autocomplete="off"
-      onkeydown="handleKey(event)"
-    />
-    <button id="send-btn" onclick="sendMessage()">Send</button>
-  </div>
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const inputEl = document.getElementById('msg-input');
+    const sendBtn = document.getElementById('send-btn');
 
-</div>
+    let chatHistory = [];
+    let startTime = Date.now();
+    let isSending = false;
 
-<!-- ANALYTICS MODAL -->
-<div id="modal-backdrop" onclick="closeModal(event)">
-  <div id="modal">
-    <div class="modal-head">
-      <h2>Conversation Analytics</h2>
-      <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-  </div>
-</div>
+    /* ── helpers ── */
+    function setDisabled(val) {
+      isSending = val;
+      inputEl.disabled = val;
+      sendBtn.disabled = val;
+    }
 
-<script>
-  const messagesEl = document.getElementById('messages');
-  const inputEl    = document.getElementById('msg-input');
-  const sendBtn    = document.getElementById('send-btn');
+    function scrollBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
 
-  let chatHistory  = [];
-  let startTime    = Date.now();
-  let isSending    = false;
+    function addBubble(role, text) {
+      const row = document.createElement('div');
+      row.className = `bubble-row ${role}`;
 
-  /* ── helpers ── */
-  function setDisabled(val) {
-    isSending = val;
-    inputEl.disabled = val;
-    sendBtn.disabled = val;
-  }
+      if (role === 'bot') {
+        const icon = document.createElement('div');
+        icon.className = 'bot-icon';
+        icon.textContent = 'N';
+        row.appendChild(icon);
+      }
 
-  function scrollBottom() {
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-  }
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${role}`;
+      bubble.textContent = text;
+      row.appendChild(bubble);
+      messagesEl.appendChild(row);
+      scrollBottom();
+      return bubble;
+    }
 
-  function addBubble(role, text) {
-    const row = document.createElement('div');
-    row.className = `bubble-row ${role}`;
+    function addTyping() {
+      const row = document.createElement('div');
+      row.className = 'bubble-row bot';
+      row.id = 'typing-row';
 
-    if (role === 'bot') {
       const icon = document.createElement('div');
       icon.className = 'bot-icon';
       icon.textContent = 'N';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble bot';
+      bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+
       row.appendChild(icon);
+      row.appendChild(bubble);
+      messagesEl.appendChild(row);
+      scrollBottom();
     }
 
-    const bubble = document.createElement('div');
-    bubble.className = `bubble ${role}`;
-    bubble.textContent = text;
-    row.appendChild(bubble);
-    messagesEl.appendChild(row);
-    scrollBottom();
-    return bubble;
-  }
-
-  function addTyping() {
-    const row = document.createElement('div');
-    row.className = 'bubble-row bot';
-    row.id = 'typing-row';
-
-    const icon = document.createElement('div');
-    icon.className = 'bot-icon';
-    icon.textContent = 'N';
-
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble bot';
-    bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-
-    row.appendChild(icon);
-    row.appendChild(bubble);
-    messagesEl.appendChild(row);
-    scrollBottom();
-  }
-
-  function removeTyping() {
-    const el = document.getElementById('typing-row');
-    if (el) el.remove();
-  }
-
-  /* ── send ── */
-  async function sendMessage() {
-    const text = inputEl.value.trim();
-    if (!text || isSending) return;
-
-    inputEl.value = '';
-    setDisabled(true);
-
-    chatHistory.push({ role: 'user', content: text });
-    addBubble('user', text);
-    addTyping();
-
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: chatHistory }),
-      });
-      const data = await res.json();
-      const reply = data.reply || 'Sorry, something went wrong.';
-      chatHistory.push({ role: 'assistant', content: reply });
-      removeTyping();
-      addBubble('bot', reply);
-    } catch {
-      removeTyping();
-      addBubble('bot', 'Connection error. Please try again.');
-      chatHistory.pop();
+    function removeTyping() {
+      const el = document.getElementById('typing-row');
+      if (el) el.remove();
     }
 
-    setDisabled(false);
-    inputEl.focus();
-  }
+    /* ── send — reads SSE stream from backend ── */
+    async function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text || isSending) return;
 
-  function handleKey(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-  }
+      inputEl.value = '';
+      setDisabled(true);
 
-  /* ── new chat ── */
-  function newChat() {
-    chatHistory = [];
-    startTime   = Date.now();
-    messagesEl.innerHTML = '';
-    addBubble('bot', 'Welcome to Northstar Homes! I\'m your AI sales assistant. How can I help you today? Are you interested in learning about our projects in Gurugram?');
-    inputEl.focus();
-  }
+      chatHistory.push({ role: 'user', content: text });
+      addBubble('user', text);
+      addTyping();
 
-  /* ── analytics ── */
-  function badgeClass(val) {
-    if (['high','positive'].includes(val)) return 'green';
-    if (['medium','neutral'].includes(val)) return 'yellow';
-    return 'red';
-  }
-  function boolClass(b) { return b ? 'yellow' : 'green'; }
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: chatHistory }),
+        });
 
-  async function showAnalytics() {
-    if (chatHistory.length === 0) { alert('Have a conversation first!'); return; }
-    const secs = Math.round((Date.now() - startTime) / 1000);
-    const duration = `${Math.floor(secs/60)}m ${secs%60}s`;
-    try {
-      const res = await fetch('/api/analytics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: chatHistory }),
-      });
-      const { analytics: a } = await res.json();
+        if (!res.ok) throw new Error('Server error');
 
-      const stats = [
-        { label: 'Customer Name',       value: a.customer_name || 'Not provided', badge: null },
-        { label: 'Interest Level',      value: a.interest_level,  badge: badgeClass(a.interest_level) },
-        { label: 'Configuration',       value: a.configuration || '—', badge: null },
-        { label: 'Budget',              value: a.budget || '—', badge: null },
-        { label: 'Site Visit',          value: a.site_visit_booked ? 'Booked ✓' : 'Not booked', badge: a.site_visit_booked ? 'green' : 'red' },
-        { label: 'Sentiment',           value: a.sentiment, badge: badgeClass(a.sentiment) },
-        { label: 'Follow-up Needed',    value: a.follow_up_needed ? 'Yes' : 'No', badge: boolClass(a.follow_up_needed) },
-        { label: 'Human Agent',         value: a.wants_human_agent ? 'Requested' : 'No', badge: boolClass(a.wants_human_agent) },
-        { label: 'Stop Communication',  value: a.stop_communication ? 'Yes' : 'No', badge: a.stop_communication ? 'red' : 'green' },
-        { label: 'Messages Sent',       value: String(a.customer_messages), badge: null },
-        { label: 'Duration',            value: duration, badge: null },
-      ];
+        // Backend streams SSE — read line by line until type==="done"
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let reply = '';
 
-      const body = document.getElementById('modal-body');
-      body.innerHTML = stats.map(s => `
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          const lines = buffer.split('\n');
+          buffer = lines.pop(); // keep incomplete last line
+
+          for (const line of lines) {
+            if (!line.startsWith('data: ')) continue;
+            try {
+              const evt = JSON.parse(line.slice(6));
+              if (evt.type === 'done') {
+                reply = evt.reply || reply;
+              } else if (evt.type === 'token') {
+                reply += evt.content || '';
+              }
+            } catch { /* ignore malformed */ }
+          }
+        }
+
+        chatHistory.push({ role: 'assistant', content: reply || 'Sorry, something went wrong.' });
+        removeTyping();
+        addBubble('bot', reply || 'Sorry, something went wrong.');
+
+      } catch (err) {
+        console.error(err);
+        removeTyping();
+        addBubble('bot', 'Connection error. Please try again.');
+        chatHistory.pop();
+      }
+
+      setDisabled(false);
+      inputEl.focus();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    }
+
+    /* ── new chat ── */
+    function newChat() {
+      chatHistory = [];
+      startTime = Date.now();
+      messagesEl.innerHTML = '';
+      addBubble('bot', 'Welcome to Northstar Homes! I\'m your AI sales assistant. How can I help you today? Are you interested in learning about our projects in Gurugram?');
+      inputEl.focus();
+    }
+
+    /* ── analytics ── */
+    function badgeClass(val) {
+      if (['high', 'positive'].includes(val)) return 'green';
+      if (['medium', 'neutral'].includes(val)) return 'yellow';
+      return 'red';
+    }
+    function boolClass(b) { return b ? 'yellow' : 'green'; }
+
+    async function showAnalytics() {
+      if (chatHistory.length === 0) { alert('Have a conversation first!'); return; }
+      const secs = Math.round((Date.now() - startTime) / 1000);
+      const duration = `${Math.floor(secs / 60)}m ${secs % 60}s`;
+      try {
+        const res = await fetch('/api/analytics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: chatHistory }),
+        });
+        const { analytics: a } = await res.json();
+
+        const stats = [
+          { label: 'Customer Name', value: a.customer_name || 'Not provided', badge: null },
+          { label: 'Interest Level', value: a.interest_level, badge: badgeClass(a.interest_level) },
+          { label: 'Configuration', value: a.configuration || '—', badge: null },
+          { label: 'Budget', value: a.budget || '—', badge: null },
+          { label: 'Site Visit', value: a.site_visit_booked ? 'Booked ✓' : 'Not booked', badge: a.site_visit_booked ? 'green' : 'red' },
+          { label: 'Sentiment', value: a.sentiment, badge: badgeClass(a.sentiment) },
+          { label: 'Follow-up Needed', value: a.follow_up_needed ? 'Yes' : 'No', badge: boolClass(a.follow_up_needed) },
+          { label: 'Human Agent', value: a.wants_human_agent ? 'Requested' : 'No', badge: boolClass(a.wants_human_agent) },
+          { label: 'Stop Communication', value: a.stop_communication ? 'Yes' : 'No', badge: a.stop_communication ? 'red' : 'green' },
+          { label: 'Messages Sent', value: String(a.customer_messages), badge: null },
+          { label: 'Duration', value: duration, badge: null },
+        ];
+
+        const body = document.getElementById('modal-body');
+        body.innerHTML = stats.map(s => `
         <div class="stat-card">
           <div class="stat-label">${s.label}</div>
           ${s.badge
@@ -484,18 +679,19 @@
         </div>
       `).join('');
 
-      document.getElementById('modal-backdrop').classList.add('open');
-    } catch {
-      alert('Could not load analytics.');
+        document.getElementById('modal-backdrop').classList.add('open');
+      } catch {
+        alert('Could not load analytics.');
+      }
     }
-  }
 
-  function closeModal(e) {
-    if (!e || e.target === document.getElementById('modal-backdrop') || e.currentTarget.classList.contains('modal-close')) {
-      document.getElementById('modal-backdrop').classList.remove('open');
+    function closeModal(e) {
+      if (!e || e.target === document.getElementById('modal-backdrop') || e.currentTarget.classList.contains('modal-close')) {
+        document.getElementById('modal-backdrop').classList.remove('open');
+      }
     }
-  }
-</script>
+  </script>
 
 </body>
+
 </html>
