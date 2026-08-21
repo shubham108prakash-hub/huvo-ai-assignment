@@ -15,6 +15,8 @@ body {
   background: #f0f2f5;
   color: #1a1a2e;
   height: 100dvh;
+  position: fixed;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -22,9 +24,11 @@ body {
   .scrollbar-thin::-webkit-scrollbar {
     width: 5px;
   }
+
   .scrollbar-thin::-webkit-scrollbar-track {
     background: transparent;
   }
+
   .scrollbar-thin::-webkit-scrollbar-thumb {
     background: #e5e7eb;
     border-radius: 10px;
