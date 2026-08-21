@@ -101,41 +101,45 @@ export default function Home() {
   }
 
   return (
-    <div className="fixed inset-0 max-w-[860px] mx-auto bg-white shadow-[0_0_60px_rgba(0,0,0,0.08)] flex flex-col">
-      <Header onAnalytics={handleAnalytics} onNewChat={handleNewChat} />
+    <div className="fixed inset-0 flex justify-center bg-[#f0f2f5]">
+      <div className="w-full max-w-[860px] flex flex-col bg-white shadow-[0_0_60px_rgba(0,0,0,0.08)] overflow-hidden">
+        <Header onAnalytics={handleAnalytics} onNewChat={handleNewChat} />
 
-      <main className="flex-1 flex flex-col overflow-hidden bg-gray-50">
-        <div className="flex-1 overflow-y-auto px-7 py-6 scrollbar-thin scroll-smooth">
-          {messages.length === 0 && (
-            <div className="flex justify-start mb-4 animate-[msgIn_0.3s_ease-out]">
-              <div className="w-8 h-8 bg-gradient-to-br from-gold-400 to-gold-500 rounded-[10px] flex items-center justify-center font-bold text-[13px] text-navy-950 shrink-0 self-end mr-2.5">
-                N
+        <main className="flex-1 flex flex-col min-h-0 bg-gray-50">
+          <div className="flex-1 overflow-y-auto px-7 py-6 scrollbar-thin scroll-smooth">
+            {messages.length === 0 && (
+              <div className="flex justify-start mb-4 animate-[msgIn_0.3s_ease-out]">
+                <div className="w-8 h-8 bg-gradient-to-br from-gold-400 to-gold-500 rounded-[10px] flex items-center justify-center font-bold text-[13px] text-navy-950 shrink-0 self-end mr-2.5">
+                  N
+                </div>
+                <div className="max-w-[68%] px-5 py-3.5 rounded-[20px] rounded-bl-[6px] bg-white text-navy-900 text-sm leading-relaxed shadow-md border border-black/[0.04]">
+                  {GREETING}
+                </div>
               </div>
-              <div className="max-w-[68%] px-5 py-3.5 rounded-[20px] rounded-bl-[6px] bg-white text-navy-900 text-sm leading-relaxed shadow-md border border-black/[0.04]">
-                {GREETING}
-              </div>
-            </div>
-          )}
+            )}
 
-          {messages.map((msg, i) => (
-            <ChatMessage key={i} role={msg.role} content={msg.content} />
-          ))}
+            {messages.map((msg, i) => (
+              <ChatMessage key={i} role={msg.role} content={msg.content} />
+            ))}
 
-          {loading && <TypingIndicator />}
+            {loading && <TypingIndicator />}
 
-          <div ref={chatEndRef} />
-        </div>
+            <div ref={chatEndRef} />
+          </div>
 
-        <ChatInput onSend={sendMessage} disabled={loading} />
-      </main>
+          <div className="shrink-0">
+            <ChatInput onSend={sendMessage} disabled={loading} />
+          </div>
+        </main>
 
-      {showAnalytics && analytics && (
-        <AnalyticsModal
-          analytics={analytics}
-          duration={duration}
-          onClose={() => setShowAnalytics(false)}
-        />
-      )}
+        {showAnalytics && analytics && (
+          <AnalyticsModal
+            analytics={analytics}
+            duration={duration}
+            onClose={() => setShowAnalytics(false)}
+          />
+        )}
+      </div>
     </div>
   );
 }
