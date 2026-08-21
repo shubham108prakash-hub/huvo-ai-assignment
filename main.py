@@ -2,17 +2,20 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from bot import chat as bot_chat
 from analytics import extract_conversation_analytics
 
 app = FastAPI(title="Northstar Homes AI Assistant")
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ChatMessage(BaseModel):
     role: str
@@ -23,10 +26,6 @@ class ChatRequest(BaseModel):
 
 class AnalyticsRequest(BaseModel):
     messages: list[ChatMessage]
-
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/api/chat")
 async def chat_endpoint(req: ChatRequest):
@@ -39,6 +38,10 @@ async def analytics_endpoint(req: AnalyticsRequest):
     messages = [{"role": m.role, "content": m.content} for m in req.messages]
     analytics = extract_conversation_analytics(messages)
     return {"analytics": analytics}
+
+@app.get("/api/health")
+async def health():
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     import uvicorn
