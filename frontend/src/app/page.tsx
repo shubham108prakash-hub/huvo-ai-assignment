@@ -101,7 +101,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col h-screen max-w-[860px] mx-auto bg-white shadow-[0_0_60px_rgba(0,0,0,0.08)]">
+    <div className="flex flex-col h-[100dvh] max-w-[860px] mx-auto bg-white shadow-[0_0_60px_rgba(0,0,0,0.08)]">
       <Header onAnalytics={handleAnalytics} onNewChat={handleNewChat} />
 
       <main className="flex-1 flex flex-col overflow-hidden bg-gray-50">
